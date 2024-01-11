@@ -3,42 +3,61 @@ import {connect} from './db.js'
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import {router as authRouter} from './routes/authRoute.js'
+import { parkingRouter } from './routes/productRoute.js';
+import { cityRouter } from './routes/cityRoute.js';
 import cookieParser from 'cookie-parser';
+import { notFound, errorHandler } from './middlewares/errorHandler.js';
+import morgan from 'morgan';
+import { bookingRouter } from './routes/bookingRoute.js';
+import { adminRoute } from './routes/adminRoute.js';
+import { vehicleRouter } from './routes/vehicleRouter.js';
 const app = express();
+
 const port = 3002;
 
 
-const corsOptions = {
-  origin: 'https://6590286b9d7cd172b98d50b4--sensational-concha-ed7566.netlify.app',
-};
+// const corsOptions = {
+//   origin: 'https://parkeme.netlify.app',
+// };
 
-app.use(cors(corsOptions));
+app.use(cors());
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.json({limit: "16kb"}))
 app.use(express.urlencoded({extended: true, limit: "16kb"}))
 app.use(express.static("public"))
 app.use(cookieParser());
+app.use(morgan("dev"));
 
-
-//routes import
+connect();
 
 
 app.use("/api/user", authRouter);
-// Define a simple route
+app.use("/api/vehicle", vehicleRouter);
+
+app.use("/api/parking", parkingRouter);
+app.use("/api/city", cityRouter);
+app.use("/api/booking", bookingRouter);
+app.use("/api/admin", adminRoute);
+
+
+
+
+
+app.use(notFound);
+app.use(errorHandler);
+
 app.get('/', (req, res) => {
   res.json({message: 'Hello, home!'});
 });
 app.get('/hello', (req, res) => {
   res.json({message: 'Hello, Express!'});
 });
-
 app.get('/hello2', (req, res) => {
     res.send('Hello2, Express!');
   });
 
-  connect();
-// Start the server
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
