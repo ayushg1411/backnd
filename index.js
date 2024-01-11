@@ -1,6 +1,8 @@
 import express from 'express';
 import {connect} from './db.js'
 import cors from 'cors';
+import dotenv from 'dotenv';
+dotenv.config();
 import bodyParser from 'body-parser';
 import {router as authRouter} from './routes/authRoute.js'
 import { parkingRouter } from './routes/productRoute.js';
@@ -13,7 +15,7 @@ import { adminRoute } from './routes/adminRoute.js';
 import { vehicleRouter } from './routes/vehicleRouter.js';
 const app = express();
 
-const port = 3002;
+const port = process.env.PORT 
 
 
 // const corsOptions = {
@@ -34,7 +36,6 @@ connect();
 
 app.use("/api/user", authRouter);
 app.use("/api/vehicle", vehicleRouter);
-
 app.use("/api/parking", parkingRouter);
 app.use("/api/city", cityRouter);
 app.use("/api/booking", bookingRouter);
@@ -58,6 +59,6 @@ app.get('/hello2', (req, res) => {
   });
 
 
-app.listen(port, () => {
+app.listen( port , () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
