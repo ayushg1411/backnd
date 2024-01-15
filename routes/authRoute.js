@@ -1,5 +1,5 @@
 import express from 'express';
-import  {createUser, login, getAllUsers, getUser, deleteUser, updateUser, deleteSide,getAllDefine,  handleRefreshToken,getCheck, createcheck, logout, updatePassword, forgotPasswordToken, resetPassword, addtoCart, getCart, createSide, getSide, updateCheck, getAllSide, createDefine}  from '../controller/userController.js';
+import  {createUser, login, getAllUsers, getUser, deleteUser, updateUser,getAllCheck, getform, deleteSide,getAllDefine,  handleRefreshToken,getCheck, createcheck, logout, updatePassword, forgotPasswordToken, resetPassword, addtoCart, getCart, createSide, getSide, updateCheck, getAllSide, createDefine}  from '../controller/userController.js';
 import { authMiddleware, isAdmin } from '../middlewares/authMiddleware.js';
 const router =express.Router();
 
@@ -29,7 +29,11 @@ router.delete('/side/:id', deleteSide);
 
 router.get('/side/:id', getSide);
 router.get('/getSides/get', getAllSide);
+router.get('/getCheck/get', getAllCheck);
+
 router.post('/save/:id', createDefine);
+router.get('/form/data/:id', getform);
+
 router.get('/define/:id', getAllDefine);
 
 

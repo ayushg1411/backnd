@@ -3,8 +3,8 @@ import { Parking } from "../models/parkingModel.js";
 import { Define} from "../models/definedModel.js";
 import { Side } from "../models/sideBar.js";
 
-import { Cart } from "../models/cartModel.js";
-import {Check} from "../models/CheckModel.js";
+// import { Cart } from "../models/cartModel.js";
+import {Check} from "../models/checkModel.js";
 import asyncHandler from "express-async-handler";
 import { generateToken } from "../config/jwtTokens.js";
 import { validateId } from "../utils/validateMongoDbId.js";
@@ -425,7 +425,7 @@ catch(err)
       res.json({ models: createdChecks });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).json({ error: error });
     }
   });
 
@@ -535,6 +535,24 @@ const getAllSide = asyncHandler (async(req, res)=>{
   }
 
 })
+const getAllCheck = asyncHandler (async(req, res)=>{
+ 
+  try{
+    const checkModel = await Check.find().select(
+      { createdAt: 0 ,
+         updatedAt:0,
+        __v :0,
+    }
+    )
+    res.json({check:checkModel});
+  }
+  catch(error)
+  {
+    throw new Error(error);
+  }
+
+})
+
 
 
 
@@ -586,6 +604,24 @@ const getAllDefine = asyncHandler (async(req, res)=>{
   }
 })
 
+const getform = asyncHandler (async(req, res)=>{
+ 
+  try{
+   const {id} = req.params;
+    const data= await Define.findOne(
+     {
+      _id: id
+     }
+      ).select("form");
+
+    
+    res.json({form:data});
+  }
+  catch(error)
+  {
+    throw new Error(error);
+  }
+})
 
 
 
@@ -594,8 +630,8 @@ export { createUser, login, logout,
    getAllUsers, getUser, deleteUser,
     updateUser , handleRefreshToken,
    updatePassword, forgotPasswordToken, 
-   resetPassword, addtoCart,
+   resetPassword, addtoCart,getform, 
    createcheck, getCheck,getCart,getSide,
-   updateCheck, getAllSide, deleteSide,
+   updateCheck, getAllSide, deleteSide,getAllCheck,
    createSide, createDefine, getAllDefine
     };
